@@ -60,7 +60,7 @@ syncData=()=>{
     
 }
  updateInState=(from,data,to)=>{
-     API.update(data,to)
+    //API.update(data,to)
    
         switch (from) {
             case 'currentlyReading':
@@ -95,22 +95,22 @@ syncData=()=>{
         }
         switch (to) {
               case 'currentlyReading':
-                this.state.currentList.push(data)
+                
                 this.setState({
-                    'currentList':currentReading,
+                    'currentList':currentReading.concat(data),
                 })
                 break;
             case 'wantToRead':
-                this.state.upcommingList.push(data)
+              
                 this.setState({
-                    'upcommingList':wantToRead
+                    'upcommingList':wantToRead.concat(data)
                 })
                 break;
 
             case 'read':
-                this.state.completedList.push(data)
+          
                 this.setState({
-                    'read':read
+                    'read':read.push(data)
                 })
                 break;
             default:
@@ -121,25 +121,58 @@ syncData=()=>{
 
     addToShelf=(data,shelf)=>{
        API.update(data,shelf)
-        console.log('shelf data',data);
-        switch (shelf) {
-            case 'currentlyReading':
-             this.state.currentList.push(data)
+        
+        try {
+          let currentExist=currentReading.findIndex(x=>x.id===data.id)
+
+          let wantExist=wantToRead.findIndex(x=>x.id===data.id)
+
+          let readExist=read.findIndex(x=>x.id===data.id)
+          
+          if(currentExist>-1)
+          {
+            currentReading.splice(currentExist,1)
+
+          }
+          if(wantExist>-1)
+          {
+              wantToRead.splice(wantExist,1)
              
+          }
+          if(readExist>-1)
+          {
+              read.splice(readExist,1)
+              
+          }
+        } catch (error) {
+            console.log(error);
+        }
+        
+         switch (shelf) {
+            case 'currentlyReading':
+               let cr=currentReading.push(data)
+                this.setState=()=>({
+                    'currentList':cr,
+                })
                 break;
             case 'wantToRead':
-          
-                 this.state.upcommingList.push(data)
-              
+               let w= wantToRead.push(data)
+                this.setState=()=>({
+                    'upcommingList':w
+                })
                 break;
 
             case 'read':
-                this.state.completedList.push(data)
-             
+               let r=read.push(data)
+                this.setState({
+                    'read':r
+                })
                 break;
             default:
                 break;
+                
         }
+        
     }
 
   render(){

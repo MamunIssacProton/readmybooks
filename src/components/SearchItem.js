@@ -2,7 +2,8 @@ import { Component } from "react";
 
 class  SearchItem extends Component{
     state={
-       selectedOption:'none'
+       selectedOption:'none',
+      
     }
     handleChange=(e)=>{
      

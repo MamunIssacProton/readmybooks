@@ -17,50 +17,53 @@ class BookShelves extends Component{
       }
     
   componentDidMount(){
-   API.getAll().then((user)=>{
-       const categories=new Set(( Object.values(user)).map(x=>x.shelf));
-       categories.forEach(category => {
-        
-            let itm=new Set((Object.values(user).filter(x=>x.shelf===category)))
-            itm.forEach(val=>{
+  this.syncData();
 
-                switch (category) {
-                    case 'currentlyReading':
-                        currentReading.push(val)
-                       
-                        break;
-                    case 'wantToRead':
-
-                        wantToRead.push(val)
-                       break;
-
-                    case 'read':
-                        read.push(val)
-                        break;
-                    default:
-                        break;
-                }
-                console.log(val.title);
-                this.setState({
-                    'currentList':currentReading,
-                    'upcommingList':wantToRead,
-                    'completedList':read,
-                   })
-            })
-       });
-      
-   });
-   
-   console.log('component mounted',wantToRead);
   
    
 }
 
-
+syncData=()=>{
+    API.getAll().then((user)=>{
+        const categories=new Set(( Object.values(user)).map(x=>x.shelf));
+        categories.forEach(category => {
+         
+             let itm=new Set((Object.values(user).filter(x=>x.shelf===category)))
+             itm.forEach(val=>{
+ 
+                 switch (category) {
+                     case 'currentlyReading':
+                         currentReading.push(val)
+                        
+                         break;
+                     case 'wantToRead':
+ 
+                         wantToRead.push(val)
+                        break;
+ 
+                     case 'read':
+                         read.push(val)
+                         break;
+                     default:
+                         break;
+                 }
+                 console.log(val.title);
+                 this.setState({
+                     'currentList':currentReading,
+                     'upcommingList':wantToRead,
+                     'completedList':read,
+                    })
+             })
+        });
+       
+    });
+    
+}
  updateInState=(from,data,to)=>{
-
+     API.update(data,to)
+   
         switch (from) {
-            case 'currentReading':
+            case 'currentlyReading':
                 let  index=this.state.currentList.findIndex(x=>x.id===data.id)
                 console.log('idx',index);
                 this.state.currentList.splice(index,1)
@@ -91,7 +94,7 @@ class BookShelves extends Component{
                 break;
         }
         switch (to) {
-              case 'currentReading':
+              case 'currentlyReading':
                 this.state.currentList.push(data)
                 this.setState({
                     'currentList':currentReading,
@@ -113,39 +116,26 @@ class BookShelves extends Component{
             default:
                 break;
         }
+    
     }
-  /*
-
- {this.state.inSearch?(
-              <h6>Search</h6>
-          ):(<div className='listcontainer'>
-              <CurrentlyReading   dataSource={this.state.currentList} state='currentReading' update={this.updateInState}></CurrentlyReading>
-              <WantToRead  dataSource={this.state.upcommingList} state='wantToRead' update={this.updateInState}></WantToRead>
-              <Read dataSource={this.state.completedList} state='read' update={this.updateInState}></Read>
-          </div>)}
-  */
 
     addToShelf=(data,shelf)=>{
+       API.update(data,shelf)
         console.log('shelf data',data);
         switch (shelf) {
-            case 'currentReading':
-                this.state.currentList.push(data)
-                this.setState({
-                    'currentList':currentReading,
-                })
+            case 'currentlyReading':
+             this.state.currentList.push(data)
+             
                 break;
             case 'wantToRead':
-                this.state.upcommingList.push(data)
-                this.setState({
-                    'upcommingList':wantToRead
-                })
+          
+                 this.state.upcommingList.push(data)
+              
                 break;
 
             case 'read':
                 this.state.completedList.push(data)
-                this.setState({
-                    'read':read
-                })
+             
                 break;
             default:
                 break;
@@ -162,7 +152,7 @@ class BookShelves extends Component{
         <Route exact path='/' render={()=>(
             <div className='listcontainer'>
            
-            <CurrentlyReading   dataSource={this.state.currentList} state='currentReading' update={this.updateInState}></CurrentlyReading>
+            <CurrentlyReading   dataSource={this.state.currentList} state='currentlyReading' update={this.updateInState}></CurrentlyReading>
             <WantToRead  dataSource={this.state.upcommingList} state='wantToRead' update={this.updateInState}></WantToRead>
             <Read dataSource={this.state.completedList} state='read' update={this.updateInState}></Read>
                  <div className='open-search'>

@@ -1,21 +1,41 @@
-function SearchItem(props){
+import { Component } from "react";
 
-    let d=props.data
-    let handleChange=(e)=>{
-       
-        props.onMove(d,e.target.value);
+class  SearchItem extends Component{
+    state={
+       selectedOption:'none'
     }
-    return(
+    handleChange=(e)=>{
+     
+     this.setState({
+        selectedOption:e.target.value
+     })
+    
+      
+        this.props.onMove(this.props.data,e.target.value);
+       }
+       render(){
+         return(
     <div className='listitem'>
-                <p>{d.Title}</p>
-               <img src={d.imageLinks.thumbnail} alt='thumbnail'></img>
-                   <select id='selection' onChange={handleChange}>
-                      <option>Move to</option>
-                       <option value='currentReading'>Current Reading</option>
+                <h1>{this.props.data.title}</h1>
+                {('imageLinks' in this.props.data)?(
+                    <img src={this.props.data.imageLinks.thumbnail} alt='thumbnail'></img>)
+                 :(
+                    <p>No image Available</p>
+                 )
+                } 
+ 
+                <p>{this.props.data.authors}</p>
+
+                   <select   id='selection' onChange={this.handleChange} value={this.state.selectedOption}>
+                      <option disabled>Move to</option>
+                       <option value='currentlyReading'>Current Reading</option>
                       <option value='wantToRead'>Want to Read</option>
                       <option value='read'>Read</option>
+                      <option value='none'>None</option>
                       </select>
            </div>
     )
+ }
+   
 }
 export default SearchItem;

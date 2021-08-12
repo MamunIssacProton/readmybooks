@@ -14,27 +14,24 @@ class  SearchBook extends Component {
   
       if(txt.length>0&&txt[0]!==' ') {
             console.log('tx',txt);
-           API.search(txt).then((data)=>{
-             
+           API.search(text.target.value).then((data)=>{
+             console.log('in search',data);
               
             if(data===undefined||data.length===0||data.error){
                 this.setState({
                     showErr:true,
-                    
+                  //  results:[]
                 })
             }
             else{
                 
-                  try {
-                  
                     this.setState({
-                   results:data
+                   results:data,
+                   showErr:false
                         })
-                  } catch (error) {
-                      
-                  }
+                    console.log('added',data);
                  
-            }
+                 }
            
     }).catch(r=>{
         console.log('error',r);
@@ -46,7 +43,7 @@ class  SearchBook extends Component {
     }
        
 }
- move=(e,shelf)=>{
+  move=(e,shelf)=>{
    this.props.addCollection(e,shelf)
  }
     render(){

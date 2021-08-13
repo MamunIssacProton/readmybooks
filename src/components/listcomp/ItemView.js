@@ -26,7 +26,12 @@ class  ItemView extends Component{
             ):(
                 <p>No Image Available</p>
             )}
-           <h6>{this.props.data.authors}</h6>
+            {this.props.data.authors.map(x=>(
+                
+                       <h6> {x} <br></br></h6>
+             
+            ))}
+          
             <select id='selection' onChange={this.handleChange} value={this.state.selectedShelf} >
             
             <option disabled>Move to</option>

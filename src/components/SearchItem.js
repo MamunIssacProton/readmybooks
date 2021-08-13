@@ -24,7 +24,8 @@ class  SearchItem extends Component{
                     <p>No image Available</p>
                  )
                 } 
- 
+               
+             
                 <p>{this.props.data.authors}</p>
 
                    <select   id='selection' onChange={this.handleChange} value={this.state.selectedOption}>

@@ -47,7 +47,7 @@ syncData=()=>{
                      default:
                          break;
                  }
-                 console.log(val.title);
+                 console.log(val.authors);
                  this.setState({
                      'currentList':currentReading,
                      'upcommingList':wantToRead,
@@ -60,57 +60,74 @@ syncData=()=>{
     
 }
  updateInState=(from,data,to)=>{
-    //API.update(data,to)
-   
+     API.update(data,to)
+    
+    try {
+        let currentExist=currentReading.findIndex(x=>x.id===data.id)
+
+        let wantExist=wantToRead.findIndex(x=>x.id===data.id)
+
+        let readExist=read.findIndex(x=>x.id===data.id)
+        
+        if(currentExist>-1)
+        {
+            currentReading.splice(currentExist,1)
+
+        }
+        if(wantExist>-1)
+        {
+            wantToRead.splice(wantExist,1)
+           
+        }
+        if(readExist>-1)
+        {
+            read.splice(readExist,1)
+            
+        }
+      } catch (error) {
+          console.log(error);
+      }
         switch (from) {
             case 'currentlyReading':
-                let  index=this.state.currentList.findIndex(x=>x.id===data.id)
-                console.log('idx',index);
-                this.state.currentList.splice(index,1)
-                console.log('cr',currentReading);
-               this.setState({
-                'currentList':currentReading,
-               })
-                break;
-            case 'wantToRead':
-                let indexx=this.state.upcommingList.findIndex(x=>x.id===data.id)
-                console.log('idx',indexx);
-                this.state.upcommingList.splice(indexx,1)
+                 this.setState({
+                    'currentList':currentReading
+                      })
+                  break;
 
-                this.setState({
-                    'upcommingList':wantToRead
+            case 'wantToRead':
+                  this.setState({
+                  'upcommingList':wantToRead
                 })
+                
                 break;
 
             case 'read':
-                let indexxx=this.state.completedList.findIndex(x=>x.id===data.id)
-                console.log('idx',indexxx);
-                this.state.completedList.splice(indexxx,1)
-                this.setState({
-                    'read':read
+                  this.setState({
+                  'read':read
                 })
+                
                 break;
             default:
                 break;
         }
         switch (to) {
               case 'currentlyReading':
-                
+                currentReading.push(data)
                 this.setState({
-                    'currentList':currentReading.concat(data),
+                    'currentList':currentReading
                 })
                 break;
             case 'wantToRead':
-              
+              wantToRead.push(data)
                 this.setState({
-                    'upcommingList':wantToRead.concat(data)
+                    'upcommingList':wantToRead
                 })
                 break;
 
             case 'read':
-          
+                read.push(data)
                 this.setState({
-                    'read':read.push(data)
+                    'read':read
                 })
                 break;
             default:

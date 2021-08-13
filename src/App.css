@@ -24,6 +24,13 @@
   background-color: rgb(0, 102, 0);
 }
 
+.auth{
+  font-size: medium;
+  color: #04AA6D;
+  line-break: auto;
+  height: 30rem;
+ background-color: #e9e;
+}
 
 
 /* search page */
